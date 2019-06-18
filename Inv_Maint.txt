@@ -1,0 +1,154 @@
+public partial class frmInvMaint : Form
+{
+    public frmInvMaint()
+    {
+        InitializeComponent();
+    }
+
+    private List<InvItems> Items = null;
+
+    private void frmInvMain_Load(object sender, EventArgs e)
+    {
+        items = InvItemsDB.GetItems();
+        FillInvItemsListBox();
+    }
+
+    private void FillInvItemsListBox()
+    {
+        lstInvItems.Items.Clear();
+        foreach (Item i in items)
+        {
+            lstInvItems.Items.Add(p.GetDisplayText("\t"));
+        }
+    }
+private void btnAdd_Click(object sender, EventArgs e)
+    {
+        frmNewItem newNewItemForm = new frmNewItem();
+        Item newItem = newNewItemForm.GetNewItem();
+        if (item != null)
+        {
+            items.Add(item);
+            InvItemsDB.SaveInvItems(items);
+            FillInvItemsListBox();
+        }
+    }
+
+    private void btnDelete_Click(object sender, EventArgs e)
+    {
+        int i = lstInvItems.SelectedIndex;
+        if (i != -1)
+        {
+            Item newItem = items[i];
+            string message = "Are you sure you want to delete "
+                + item.Description + "?";
+            DialogResult button =
+                MessageBox.Show(message, "Confirm Delete",
+                MessageBoxButtons.YesNo);
+            if (button == DialogResult.Yes)
+            {
+                items.Remove(item);
+                InvItemsDB.SaveItems(items);
+                FillInvItemsListBox();
+            }
+        }
+    }
+
+    private void btnExit_Click(object sender, EventArgs e)
+    {
+        this.Close();
+    }
+}
+
+
+
+NEW PRODUCT FORM
+
+public partial class frmNewProduct : Form
+{
+    public frmNewProduct()
+    {
+        InitializeComponent();
+    }
+
+    private InvItem item = null;
+
+    public InvItem GetNewItem()
+    {
+        this.ShowDialog();
+        return item;
+    }
+
+    private void btnSave_Click(object sender, EventArgs e)
+    {
+        if (IsValidData())
+        {
+            item = new InvItem(txtCode.Text, txtDescription.Text,
+                Convert.ToDecimal(txtPrice.Text));
+            this.Close();
+        }
+    }
+private bool IsValidData()
+    {
+        return Validator.IsPresent(txtCode)        &&
+               Validator.IsPresent(txtDescription) &&
+               Validator.IsPresent(txtPrice)       &&
+               Validator.IsDecimal(txtPrice);
+    }
+
+    private void btnCancel_Click(object sender, EventArgs e)
+    {
+        this.Close();
+    }
+}
+
+
+CODE FOR VALIDATOR CLASS
+
+public static class Validator
+{
+    private static string title = "Entry Error";
+
+    public static string Title
+    {
+        get
+        {
+            return title;
+        }
+        set
+        {
+            title = value;
+        }
+    }
+
+public static bool IsPresent(TextBox textBox)
+    {
+        if (textBox.Text == "")
+        {
+            MessageBox.Show(textBox.Tag + " is a required field.",
+                Title);
+            textBox.Focus();
+            return false;
+        }
+        return true;
+    }
+
+public static bool IsDecimal(TextBox textBox)
+    {
+        decimal number = 0m;
+        if (Decimal.TryParse(textBox.Text, out number))
+        {
+            return true;
+        }
+        else
+        {
+            MessageBox.Show(textBox.Tag +
+                " must be a decimal value.", Title);
+            textBox.Focus();
+            return false;
+        }
+    }
+}
+
+	
+	
+
