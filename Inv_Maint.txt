@@ -61,7 +61,7 @@ private void btnAdd_Click(object sender, EventArgs e)
 
 
 
-NEW PRODUCT FORM
+//NEW PRODUCT FORM
 
 public partial class frmNewProduct : Form
 {
@@ -101,8 +101,7 @@ private bool IsValidData()
     }
 }
 
-
-CODE FOR VALIDATOR CLASS
+//CODE FOR VALIDATOR CLASS
 
 public static class Validator
 {
@@ -149,6 +148,6 @@ public static bool IsDecimal(TextBox textBox)
     }
 }
 
-	
+
 	
 
